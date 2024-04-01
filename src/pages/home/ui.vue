@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Header from '@/widgets/Header/index.vue'
+import {Header} from '@/widgets/header'
 </script>
 
 <template>
@@ -7,3 +7,4 @@ import Header from '@/widgets/Header/index.vue'
     <Header />
   </main>
 </template>
+@/widgets/header
