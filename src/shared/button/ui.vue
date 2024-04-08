@@ -1,22 +1,25 @@
 <script lang="ts" setup>
-import {Typography} from '@/shared/typography'
+import {Typography} from '@/shared/typography';
+import { useSlots } from "vue";
+
 interface Props {
   color?: 'primary' | 'secondary' | 'grayscale' | 'error'
   decoration?: 'default' | 'outline' | 'none'
-  size?: 'L' | 'M' | 'S'
+  size?: 'l' | 'm' | 's'
   disabled?: boolean
 }
 
 const props = defineProps<Props>()
+const slots = useSlots();
 
-const { color = 'primary', decoration = 'default', size = 'M', disabled = false } = props
+const { color = 'primary', decoration = 'default', size = 'm', disabled = false } = props
 const classes = ['button', `color_${color}`, `decoration_${decoration}`, `size_${size}`]
 </script>
 
 <template>
   <button :class="classes" :disabled="disabled">
     <slot name="leftIcon" />
-    <Typography class="button__text" tag-name="p" size="s"><slot /></Typography>
+    <Typography v-if="slots.default" class="button__text" tag-name="p" size="s"><slot /></Typography>
     <slot name="rightIcon" />
   </button>
 </template>
@@ -27,12 +30,12 @@ const classes = ['button', `color_${color}`, `decoration_${decoration}`, `size_$
   align-items: center;
   column-gap: 8px;
   border-radius: 4px;
-  border: 1px solid transparent;
+  border: none;
   cursor: pointer;
   user-select: none;
   width: 100%;
 }
-.button.size_M {
+.button.size_m {
   padding: 8px;
 }
 
@@ -45,5 +48,13 @@ const classes = ['button', `color_${color}`, `decoration_${decoration}`, `size_$
 .button__text {
   width: 100%;
   text-align: center;
+}
+.button.decoration_none{
+  background-color: unset;
+  border-color: unset;
+}
+
+.button.decoration_name:deep(path) {
+  fill: var(--main-on-surface);
 }
 </style>
