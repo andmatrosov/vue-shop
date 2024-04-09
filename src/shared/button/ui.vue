@@ -39,14 +39,25 @@ const classes = ['button', `color_${color}`, `decoration_${decoration}`, `size_$
   padding: 8px;
 }
 
+.button.size_m .button__text{
+  font-size: 16px;
+}
+
 .button.color_secondary {
   background-color: var(--main-secondary);
   border-color: var(--main-secondary);
   color: var(--main-on-secondary);
 }
 
+.button.color_primary{
+  background-color: var(--main-primary);
+  border-color: var(--main-primary);
+  color: var(--main-on-secondary);
+}
+
 .button__text {
   width: 100%;
+  line-height: 1.5;
   text-align: center;
 }
 .button.decoration_none{

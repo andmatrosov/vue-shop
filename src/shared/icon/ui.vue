@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 interface Props {
-  type: 'menu' | 'favorites' | 'orders' | 'cart' | 'chevron' | 'close'
+  type: 'menu' | 'favorites' | 'orders' | 'cart' | 'chevron' | 'login' | 'close'
 }
 
 const props = defineProps<Props>()
@@ -75,5 +75,16 @@ const { type } = props
       fill="none"
       xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M5.646 8.646a.5.5 0 0 1 .708 0L12 14.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="#414141"/>
+  </svg>
+  <svg
+      v-if="type == 'login'"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5 2a.5.5 0 0 1 .5-.5h5A2.5 2.5 0 0 1 21.5 4v16a2.5 2.5 0 0 1-2.5 2.5h-5a.5.5 0 0 1 0-1h5a1.5 1.5 0 0 0 1.5-1.5V4A1.5 1.5 0 0 0 19 2.5h-5a.5.5 0 0 1-.5-.5" fill="#fff"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.646 7.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L14.293 12l-3.647-3.646a.5.5 0 0 1 0-.708" fill="#fff"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" fill="#fff"/>
   </svg>
 </template>

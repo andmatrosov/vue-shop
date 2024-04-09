@@ -1,31 +1,50 @@
 <script lang="ts" setup>
-import {reactive} from "vue";
+import {computed, reactive} from "vue";
+import {Navigation} from "@/features/header/navigation";
+import {UserMenu} from "@/features/header/user-menu";
+import { usePersonStore } from "@/entities/person";
 import {Container} from '@/shared/container'
 import {Logo} from '@/shared/logo'
 import {Button} from '@/shared/button'
 import {Icon} from '@/shared/icon'
 import {Field} from "@/shared/field";
-import {Navigation} from "@/features/header/navigation";
-import {UserMenu} from "@/features/header/user-menu";
 import avatarImg from '/avatar.png'
+import {storeToRefs} from "pinia";
+
+
+const personStore = usePersonStore();
+
+const { person, isAuth } = storeToRefs(personStore);
+const setIsAuth = personStore.setIsAut;
 
 const onChangeSearch = (value: string) => {
   console.log(value)
 }
 
+
+
 const navItems = reactive([
   {label: 'Избранное', icon: 'favorites', count: '', link: '/favorites' },
   {label: 'Заказы', icon: 'orders', count: '', link: '/orders' },
-  {label: 'Корзина', icon: 'cart', count: '1', link: '/cart' }
+  {label: 'Корзина', icon: 'cart', count: 1, link: '/cart' }
 ]);
 
 const userMenu = reactive({
   avatar: avatarImg,
-  name: "Лёха",
-  menu: []
+  name: person.value.name,
+  menu: [
+    { label: 'Профайл', link: '/profile'},
+    { label: 'Выйти', action: 'logout'},
+  ]
 })
 const onSearch = () => {
   console.log('SEND TO SERVER')
+}
+
+const onClickLogin = (action: string) => {
+  if(action === 'login') {
+    setIsAuth(true);
+  }
 }
 </script>
 
@@ -59,7 +78,19 @@ const onSearch = () => {
         <Navigation :data="navItems" />
       </div>
       <div class="header__user-menu">
-        <UserMenu :data="userMenu" />
+        <UserMenu v-if="isAuth" :data="userMenu" />
+        <Button
+            v-else
+            color="primary"
+            decoration="default"
+            size="m"
+            @click="() => onClickLogin('login')"
+        >
+          Войти
+          <template #rightIcon>
+            <Icon type="login"/>
+          </template>
+        </Button>
       </div>
     </Container>
   </header>
@@ -95,7 +126,17 @@ const onSearch = () => {
 }
 
 .header__user-menu{
+  position: relative;
   width: 217px;
+  height: 100%;
   padding: 8px;
+}
+.header__user-menu:deep(.user-menu){
+  position: absolute;
+}
+
+.header__user-menu:deep(>.button){
+  margin-top: 8px;
+  margin-left: 24px;
 }
 </style>
