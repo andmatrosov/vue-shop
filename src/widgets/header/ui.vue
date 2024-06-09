@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 import {reactive, ref} from "vue";
+import { RouterLink } from "vue-router";
 import {Navigation} from "@/features/header/navigation";
 import {UserMenu} from "@/features/header/user-menu";
 import {DropdownMenu} from "@/features/header/dropdown";
 import { usePersonStore } from "@/entities/person";
+import { useScreenStore } from "@/entities/screen";
 import {Container} from '@/shared/container'
 import {Logo} from '@/shared/logo'
 import {Button} from '@/shared/button'
 import {Icon} from '@/shared/icon'
 import {Field} from "@/shared/field";
-import avatarImg from '/avatar.png'
 import {storeToRefs} from "pinia";
 
+const screenStore = useScreenStore();
+const { platform } = storeToRefs(screenStore);
 
 const personStore = usePersonStore();
 
@@ -26,7 +29,7 @@ const navItems = reactive([
 ]);
 
 const userMenu = reactive({
-  avatar: avatarImg,
+  avatar: person.value.avatar,
   name: person.value.name,
   menu: [
     { label: 'Профайл', link: '/profile'},
@@ -34,7 +37,7 @@ const userMenu = reactive({
   ]
 })
 
-const dropDownIsHidden = ref<boolean>(true);
+const dropDownIsHidden = ref(true);
 
 const onChangeSearch = (value: string) => console.log(value);
 const onSearch = () => console.log('SEND TO SERVER');
@@ -46,9 +49,13 @@ const toggleDropdownVisibility = () =>  dropDownIsHidden.value = !dropDownIsHidd
   <header class="header">
     <div class="header__content">
       <Container class="header__container">
-        <Logo orientation="horizontal" colorfull bg-color="white" withText />
+        <div class="header__logo">
+					<RouterLink to="/">
+						<Logo orientation="horizontal" colorfull bg-color="white" :withText="platform === 'desktop'"/>
+					</RouterLink>
+				</div>
         <div class="header__catalog">
-          <Button color="secondary" @mouseenter="toggleDropdownVisibility">
+          <Button color="secondary" @click="toggleDropdownVisibility">
             <template v-slot:leftIcon>
               <Icon type="menu" />
             </template>
@@ -76,9 +83,7 @@ const toggleDropdownVisibility = () =>  dropDownIsHidden.value = !dropDownIsHidd
           <UserMenu v-if="isAuth" :data="userMenu" />
           <Button
               v-else
-              color="primary"
-              decoration="default"
-              size="m"
+							class="header__login-btn"
               @click="onClickLogin"
           >
             Войти
@@ -116,18 +121,23 @@ const toggleDropdownVisibility = () =>  dropDownIsHidden.value = !dropDownIsHidd
   height: 100%;
 }
 
+.header__logo:deep(svg){
+	flex-shrink: 0;
+}
+
 .header__catalog {
   width: 140px;
   margin-left: 40px;
 }
 
 .header__search{
-  width: 374px;
-  margin-left: 16px;
+  width: max-content;
+	flex-grow: 1;
+  margin-left: 20px;
 }
 
-.header-navigation{
-  margin-left: 40px;
+.header__navigation{
+  margin: 0 24px 0 40px;
 }
 
 .header__user-menu{
@@ -136,12 +146,67 @@ const toggleDropdownVisibility = () =>  dropDownIsHidden.value = !dropDownIsHidd
   height: 100%;
   padding: 8px;
 }
-.header__user-menu:deep(.user-menu){
-  position: absolute;
+
+
+.header__user-menu:deep(.button){
+	margin-top: 8px;
 }
 
-.header__user-menu:deep(>.button){
-  margin-top: 8px;
-  margin-left: 24px;
+@media screen and (max-width: 1207px){
+	.header__logo:deep(svg){
+		width: 49px;
+	}
+
+	.header__user-menu{
+		width: max-content;
+	}
+
+	.header__catalog{
+		width: unset;
+		margin-left: 20px;
+	}
+
+	.header__navigation{
+		margin: 0 16px 0 20px;
+	}
+
+	.header__user-menu{
+		width: unset;
+	}
+
+	.header__user-menu:deep(.user-menu){
+		width: max-content;
+	}
+
+	.header__user-menu:deep(.button .typography),
+	.header__catalog:deep(.typography){
+		display: none;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.header {
+		height: 56px;
+	}
+
+	.header__container {
+		padding: 0 16px;
+	}
+
+	.header__catalog,
+	.header__navigation,
+	.header__user-menu{
+		display: none;
+	}
+
+	.header__logo a {
+		display: flex;
+		align-items: center;
+	}
+
+	.header__logo:deep(svg){
+		width: 39px;
+	}
+
 }
 </style>

@@ -90,7 +90,6 @@
     align-items: center;
     grid-gap: 10px;
     padding: 8px;
-    margin-left: 24px;
     background-color: var(--main-surface);
     z-index: 2;
   }
@@ -122,8 +121,7 @@
   .user-menu__list{
     position: absolute;
     display: none;
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column: 1 / 4;
     z-index: 0;
   }
 
@@ -132,8 +130,13 @@
   }
 
   .user-menu.is-open__true .user-menu__list{
-    position: relative;
+    position: absolute;
     display: block;
+		top: 100%;
+		right: 0;
+		border-radius: 8px 0 8px 8px;
+		overflow: hidden;
+		box-shadow: var(--shadow-default-m);
   }
 
   .user-menu .user-menu__button:deep(svg) {
@@ -143,4 +146,17 @@
   .user-menu.is-open__true .user-menu__button:deep(svg) {
     transform: rotate(180deg);
   }
+
+	@media screen and (max-width: 1207px){
+		.user-menu {
+			grid-template-columns: 1fr;
+		}
+		.user-menu__list{
+			grid-column: unset;
+		}
+		.user-menu__name,
+		.user-menu__button {
+			display: none;
+		}
+	}
 </style>
